@@ -1,0 +1,72 @@
+{
+  "project": "MACELES-GNB phosphorus models",
+  "source_repository": {
+    "local_path": "/home/yuzhu/workspace/mace-0.3.14",
+    "base_commit": "667eee4",
+    "copied_policy": "Tracked source files were copied from the working tree; untracked scratch and comparison files were intentionally excluded."
+  },
+  "training_dataset": {
+    "local_file": "/home/yuzhu/workspace/data/P_GAP_20_fitting_data.xyz",
+    "system": "elemental phosphorus",
+    "reference_level": "PBE+MBD-style labels from the P-GAP-20 benchmark dataset",
+    "energy_key": "energy",
+    "forces_key": "forces",
+    "validation_fraction": 0.02,
+    "seed": 123
+  },
+  "shared_training_parameters": {
+    "num_interactions": 2,
+    "num_channels": 192,
+    "max_L": 1,
+    "correlation": 3,
+    "r_max_angstrom": 4.5,
+    "forces_weight": 1000,
+    "energy_weight": 40,
+    "weight_decay": "5e-10",
+    "batch_size": 32,
+    "valid_batch_size": 32,
+    "max_num_epochs": 500,
+    "swa": true,
+    "start_swa": 400,
+    "swa_lr": 0.00025,
+    "swa_forces_weight": 10,
+    "default_dtype": "float32",
+    "E0s": {"15": -0.09753304}
+  },
+  "models": [
+    {
+      "id": "P_MACE_baseline",
+      "file": "models/P_MACE_baseline_stagetwo.model",
+      "architecture": "MACE",
+      "components": ["short-range MACE"],
+      "size_bytes": 8189181,
+      "sha256": "833fd83292a11182eed67b9533b4de5bac747e58afba847b8a42bb473907cb61"
+    },
+    {
+      "id": "P_MACELES",
+      "file": "models/P_MACELES_stagetwo.model",
+      "architecture": "MACELES",
+      "components": ["short-range MACE", "learned long-range LES"],
+      "size_bytes": 7779551,
+      "sha256": "5f121e379ac07c5f69fa2239c376a2c001f90b62242407e69ac682f6405397f6"
+    },
+    {
+      "id": "P_MACE_gnb",
+      "file": "models/P_MACE_gnb_stagetwo.model",
+      "architecture": "MACE",
+      "components": ["short-range MACE", "GNB analytical dispersion term"],
+      "gnb_cutoff_angstrom": 12.0,
+      "size_bytes": 8194622,
+      "sha256": "8d32453d5c7b544ab04649f9f25708877411502fd3ac9d45ed6f5c752651aa2f"
+    },
+    {
+      "id": "P_MACELES_gnb",
+      "file": "models/P_MACELES_gnb_stagetwo.model",
+      "architecture": "MACELES",
+      "components": ["short-range MACE", "learned long-range LES", "GNB analytical dispersion term"],
+      "gnb_cutoff_angstrom": 12.0,
+      "size_bytes": 7785947,
+      "sha256": "e96ecefe346af501169d95643c47846479b0fb51c9c9678ba3a100f2895c7a98"
+    }
+  ]
+}
